@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CricHeroes Impact Dashboard</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1>CricHeroes Impact Metric</h1>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+
+        <section class="search-section">
+
+            <div class="search-bar">
+
+                <div style="position: relative; flex: 1; display: flex;">
+                    <input type="text" id="player-search" placeholder="Search player" autocomplete="off">
+                    <div id="search-suggestions" class="suggestions-dropdown"></div>
+                </div>
+
+                <button id="search-btn">Search</button>
+
+            </div>
+
+        </section>
+
+
+        <div class="dashboard-grid">
+
+
+            <section class="player-info-section" id="player-card-container">
+
+                <h2>Player Profile</h2>
+
+            </section>
+
+
+            <section class="impact-gauge-section" id="gauge-container">
+
+                <h2>Impact Score</h2>
+
+            </section>
+
+
+            <section class="impact-chart-section" id="innings-chart-container">
+                <h2>Impact per Inning</h2>
+            </section>
+
+
+            <section class="momentum-chart-section" id="momentum-chart-container">
+                <h2>Impact Momentum</h2>
+            </section>
+
+
+            <section class="comparison-section">
+                <h2>Player Comparison</h2>
+
+                <div class="comparison-select">
+                    <select id="player-a-select">
+                        <option value="">Select Player A</option>
+                    </select>
+
+                    <select id="player-b-select">
+                        <option value="">Select Player B</option>
+                    </select>
+                </div>
+
+                <!-- Comparison Cards will render here -->
+                <div id="comparison-cards-wrapper">
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+
+        <p>© 2026 CricHeroes</p>
+
+    </footer>
+
+
+    <script src="js/components/gauge.js"></script>
+
+    <script src="js/components/charts.js"></script>
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>

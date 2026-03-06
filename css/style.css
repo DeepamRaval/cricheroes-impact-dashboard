@@ -1,0 +1,517 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-color: #0b1120;
+    --card-bg: rgba(17, 24, 39, 0.55);
+    --primary-accent: #22c55e;
+    --secondary-accent: #facc15;
+    --danger-red: #ef4444;
+    --text-color: #e5e7eb;
+    --text-muted: #9ca3af;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-radius: 14px;
+}
+
+/* GLOBAL */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at top, #111827 0%, #020617 100%);
+    color: var(--text-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+
+/* =========================
+STADIUM LIGHTING BACKGROUND
+========================= */
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.15;
+}
+
+body::before {
+    top: -250px;
+    left: -250px;
+    background: radial-gradient(circle, #22c55e 0%, transparent 70%);
+    animation: glowMove1 10s infinite alternate ease-in-out;
+}
+
+body::after {
+    bottom: -250px;
+    right: -250px;
+    background: radial-gradient(circle, #22c55e 0%, transparent 70%);
+    animation: glowMove2 12s infinite alternate ease-in-out;
+}
+
+@keyframes glowMove1 {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.3) translate(80px, 80px);
+    }
+}
+
+@keyframes glowMove2 {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.3) translate(-80px, -80px);
+    }
+}
+
+
+/* =========================
+NAVBAR
+========================= */
+
+.navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    backdrop-filter: blur(18px);
+    background: rgba(17, 24, 39, 0.55);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: auto;
+    padding: 1rem 2rem;
+}
+
+.navbar h1 {
+    font-size: 1.6rem;
+    color: var(--primary-accent);
+    font-weight: 700;
+}
+
+
+/* =========================
+MAIN CONTAINER
+========================= */
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 6rem auto 2rem;
+    padding: 0 2rem;
+}
+
+
+/* =========================
+SEARCH BAR
+========================= */
+
+.search-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.search-bar {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(31, 41, 55, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 6px;
+    position: relative;
+}
+
+#player-search {
+    flex: 1;
+    padding: 1rem;
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+}
+
+#search-btn {
+    background: var(--primary-accent);
+    border: none;
+    padding: 0 2rem;
+    color: black;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#search-btn:hover {
+    background: #16a34a;
+}
+
+/* =========================
+SUGGESTIONS DROPDOWN
+========================= */
+
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    z-index: 2000;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.suggestion-item {
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: rgba(34, 197, 94, 0.2);
+}
+
+.suggestion-item .player-name {
+    font-weight: 600;
+    display: block;
+}
+
+.suggestion-item .player-meta {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+
+/* =========================
+GRID LAYOUT
+========================= */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5rem;
+}
+
+
+/* =========================
+GLASS CARDS
+========================= */
+
+.dashboard-grid>section {
+
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: var(--border-radius);
+
+    padding: 1.5rem;
+
+    transition: all .35s ease;
+}
+
+.dashboard-grid>section:hover {
+
+    transform: translateY(-6px) scale(1.01);
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-grid h2 {
+
+    font-size: 1.2rem;
+
+    margin-bottom: 1rem;
+
+    border-bottom: 1px solid var(--border-color);
+
+    padding-bottom: .5rem;
+}
+
+
+/* =========================
+GRID POSITIONS
+========================= */
+
+.player-info-section {
+    grid-column: span 4;
+}
+
+.impact-gauge-section {
+    grid-column: span 8;
+}
+
+.impact-chart-section {
+    grid-column: span 6;
+    max-height: 380px;
+}
+
+.momentum-chart-section {
+    grid-column: span 6;
+    max-height: 380px;
+}
+
+.comparison-section {
+    grid-column: span 12;
+}
+
+
+/* =========================
+PLAYER CARD
+========================= */
+
+.player-card {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.clutch-badge {
+
+    background: linear-gradient(45deg, #ef4444, #f97316);
+
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    width: fit-content;
+
+    font-size: .8rem;
+
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.08);
+    }
+
+}
+
+
+/* =========================
+COMPARISON SECTION FIX
+========================= */
+
+.comparison-select {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.comparison-select select {
+    flex: 1;
+    max-width: 300px;
+
+    border-radius: 8px;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    border: 1px solid var(--border-color);
+
+    color: white;
+
+    font-size: 1rem;
+
+    padding: 0.7rem 1rem;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.comparison-select select:hover {
+    border-color: var(--primary-accent);
+}
+
+
+/* comparison cards layout */
+
+#comparison-cards-wrapper {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 1.5rem;
+}
+
+
+/* cards */
+
+.compare-card {
+
+    background: rgba(17, 24, 39, 0.55);
+
+    backdrop-filter: blur(12px);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: var(--border-radius);
+
+    padding: 1.5rem;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.6rem;
+
+    position: relative;
+
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.compare-card:hover {
+
+    transform: translateY(-5px);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.compare-card h3 {
+
+    text-align: center;
+
+    font-size: 1.4rem;
+
+    margin-bottom: .4rem;
+
+    border-bottom: 1px solid var(--border-color);
+
+    padding-bottom: .4rem;
+}
+
+.compare-card p {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: .45rem .7rem;
+
+    background: rgba(0, 0, 0, 0.25);
+
+    border-radius: 6px;
+
+    font-size: .95rem;
+}
+
+
+/* winner highlight */
+
+.winner {
+
+    border: 2px solid var(--primary-accent);
+
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.winner::before {
+
+    content: "Better Impact";
+
+    position: absolute;
+
+    top: -10px;
+
+    right: -10px;
+
+    background: var(--primary-accent);
+
+    color: black;
+
+    font-size: 0.7rem;
+
+    font-weight: 600;
+
+    padding: 4px 10px;
+
+    border-radius: 999px;
+}
+
+
+/* responsive */
+
+@media (max-width:768px) {
+
+    #comparison-cards-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-select {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .comparison-select select {
+        width: 100%;
+        max-width: none;
+    }
+
+}
+
+/* =========================
+FOOTER
+========================= */
+
+.footer {
+
+    margin-top: 3rem;
+
+    text-align: center;
+
+    color: var(--text-muted);
+
+}
+
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media (max-width:900px) {
+
+    .player-info-section,
+    .impact-gauge-section {
+
+        grid-column: span 12;
+
+    }
+
+}
