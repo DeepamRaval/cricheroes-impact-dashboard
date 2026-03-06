@@ -1,18 +1,42 @@
 let playerData = [];
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
+    fetch("data/final_scores.json")
+        .then(response => response.json())
+        .then(data => {
+            playerData = data;
 
-    const response = await fetch("data/final_scores.json");
+            // Artificial delay for premium feel
+            setTimeout(() => {
+                const loader = document.getElementById("loader-wrapper");
+                loader.style.opacity = "0";
+                setTimeout(() => loader.style.visibility = "hidden", 800);
 
-    playerData = await response.json();
+                // Initialize features
+                setupSearch();
+                setupComparison(data);
 
-    setupSearch();
-
-    setupComparison();
-
-    updateDashboard(playerData[0]);
-
+                // Show landing state (no auto-load as requested)
+                showLandingState();
+            }, 2000);
+        });
 });
+
+function showLandingState() {
+    const playerCategory = document.querySelector(".player-category");
+    if (playerCategory) playerCategory.innerText = "Select a player to begin";
+
+    // Clear dynamic sections
+    document.getElementById("gauge-container").innerHTML = `
+        <div style="text-align:center; padding: 2rem; color: var(--text-muted)">
+            <p>Ready to calculate impact metrics.</p>
+            <p style="font-size: 0.8rem">Search for a player above.</p>
+        </div>
+    `;
+
+    document.getElementById("innings-chart-container").innerHTML = `<h2>Impact per Inning</h2><div class="empty-chart-msg">Awaiting player selection...</div>`;
+    document.getElementById("momentum-chart-container").innerHTML = `<h2>Impact Momentum</h2><div class="empty-chart-msg">Awaiting player selection...</div>`;
+}
 
 
 function setupSearch() {
