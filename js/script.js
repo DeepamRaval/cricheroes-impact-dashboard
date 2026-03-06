@@ -237,18 +237,16 @@ function renderComparison(a, b) {
             <div class="compare-card ${isWinner ? 'winner' : ''}">
                 ${isWinner ? '<div class="winner-badge">Better Impact</div>' : ''}
                 <h3>${p.name}</h3>
-                <p><span>Impact Score</span> <span>${p.impact_score}</span></p>
-                <p><span>Matches</span> <span>${p.matches_played}</span></p>
-                <p><span>Trend</span> <span class="trend-${p.trend.toLowerCase()}">${p.trend}</span></p>
+                <div class="comp-stat-row"><span>Impact Score</span> <strong>${p.impact_score}</strong></div>
+                <div class="comp-stat-row"><span>Matches</span> <strong>${p.matches_played}</strong></div>
+                <div class="comp-stat-row"><span>Trend</span> <strong class="trend-${p.trend.toLowerCase()}">${p.trend}</strong></div>
             </div>
         `;
     };
 
     wrap.innerHTML = `
         ${statusMsg}
-        <div style="display:flex; gap:1.5rem; justify-content:center; width:100%">
-            ${card(a)}
-            ${card(b)}
-        </div>
+        ${card(a)}
+        ${card(b)}
     `;
 }
