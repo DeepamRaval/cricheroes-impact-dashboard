@@ -579,30 +579,36 @@ COMPARISON SECTION FIX
 
     border: 2px solid var(--primary-accent);
 
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+    box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);
+    transform: translateY(-5px);
 }
 
-.winner::before {
-
-    content: "Better Impact";
-
+.winner-badge {
     position: absolute;
-
-    top: -10px;
-
-    right: -10px;
-
+    top: -12px;
+    right: -12px;
     background: var(--primary-accent);
-
     color: black;
-
-    font-size: 0.7rem;
-
-    font-weight: 600;
-
+    font-size: 0.75rem;
+    font-weight: 700;
     padding: 4px 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10;
+}
 
-    border-radius: 999px;
+.comp-status {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 8px;
+    color: var(--secondary-accent);
+    font-size: 0.9rem;
+    font-weight: 500;
+    animation: fadeIn 0.5s ease;
 }
 
 

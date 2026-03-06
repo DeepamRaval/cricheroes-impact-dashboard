@@ -218,31 +218,37 @@ function compare() {
 
 
 function renderComparison(a, b) {
-
     const wrap = document.getElementById("comparison-cards-wrapper");
 
-    const winner = a.impact_score > b.impact_score ? a : b;
+    let statusMsg = "";
+    let winnerName = null;
+
+    if (a.name === b.name) {
+        statusMsg = `<div class="comp-status">Comparing same player results in identical impact.</div>`;
+    } else if (a.impact_score === b.impact_score) {
+        statusMsg = `<div class="comp-status">Both players have identical impact scores!</div>`;
+    } else {
+        winnerName = a.impact_score > b.impact_score ? a.name : b.name;
+    }
 
     const card = (p) => {
-
+        const isWinner = winnerName && p.name === winnerName;
         return `
-
-<div class="compare-card ${p.name === winner.name ? 'winner' : ''}">
-
-<h3>${p.name}</h3>
-
-<p>Impact Score: ${p.impact_score}</p>
-
-<p>Matches: ${p.matches_played}</p>
-
-<p>Trend: ${p.trend}</p>
-
-</div>
-
-`;
-
+            <div class="compare-card ${isWinner ? 'winner' : ''}">
+                ${isWinner ? '<div class="winner-badge">Better Impact</div>' : ''}
+                <h3>${p.name}</h3>
+                <p><span>Impact Score</span> <span>${p.impact_score}</span></p>
+                <p><span>Matches</span> <span>${p.matches_played}</span></p>
+                <p><span>Trend</span> <span class="trend-${p.trend.toLowerCase()}">${p.trend}</span></p>
+            </div>
+        `;
     };
 
-    wrap.innerHTML = card(a) + card(b);
-
+    wrap.innerHTML = `
+        ${statusMsg}
+        <div style="display:flex; gap:1.5rem; justify-content:center; width:100%">
+            ${card(a)}
+            ${card(b)}
+        </div>
+    `;
 }
