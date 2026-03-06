@@ -5,57 +5,40 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             playerData = data;
-
-            // Artificial delay for premium feel
-            setTimeout(() => {
-                const loader = document.getElementById("loader-wrapper");
-                loader.style.opacity = "0";
-                setTimeout(() => loader.style.visibility = "hidden", 800);
-
-                // Initialize features
-                setupSearch();
-                setupComparison(data);
-
-                // Show landing state (no auto-load as requested)
-                showLandingState();
-            }, 2000);
+            initApp();
         });
 });
 
-function showLandingState() {
-    const playerCategory = document.querySelector(".player-category");
-    if (playerCategory) playerCategory.innerText = "Select a player to begin";
+function initApp() {
+    // 1. Setup Hero Search (Landing Page)
+    const landingInput = document.getElementById("landing-player-search");
+    const landingSuggestions = document.getElementById("landing-suggestions");
+    const analyzeBtn = document.getElementById("analyze-btn");
 
-    // Clear dynamic sections
-    document.getElementById("gauge-container").innerHTML = `
-        <div style="text-align:center; padding: 2rem; color: var(--text-muted)">
-            <p>Ready to calculate impact metrics.</p>
-            <p style="font-size: 0.8rem">Search for a player above.</p>
-        </div>
-    `;
+    setupAutoComplete(landingInput, landingSuggestions, (name) => {
+        startImpactAnalysis(name);
+    });
 
-    document.getElementById("innings-chart-container").innerHTML = `<h2>Impact per Inning</h2><div class="empty-chart-msg">Awaiting player selection...</div>`;
-    document.getElementById("momentum-chart-container").innerHTML = `<h2>Impact Momentum</h2><div class="empty-chart-msg">Awaiting player selection...</div>`;
+    analyzeBtn.addEventListener("click", () => {
+        startImpactAnalysis(landingInput.value);
+    });
+
+    // 2. Setup Nav Search (Dashboard)
+    const navInput = document.getElementById("nav-player-search");
+    const navSuggestions = document.getElementById("nav-suggestions");
+
+    setupAutoComplete(navInput, navSuggestions, (name) => {
+        const player = playerData.find(p => p.name.toLowerCase() === name.toLowerCase());
+        if (player) updateDashboard(player);
+    });
+
+    // 3. Setup Comparison as usual
+    setupComparison();
 }
 
-
-function setupSearch() {
-    const searchInput = document.getElementById("player-search");
-    const searchBtn = document.getElementById("search-btn");
-    const suggestionsDiv = document.getElementById("search-suggestions");
-
-    const performSearch = (playerName) => {
-        const name = (playerName || searchInput.value).toLowerCase();
-        const player = playerData.find(p => p.name.toLowerCase() === name);
-        if (player) {
-            updateDashboard(player);
-            suggestionsDiv.style.display = "none";
-            searchInput.value = player.name;
-        }
-    };
-
-    searchInput.addEventListener("input", () => {
-        const value = searchInput.value.toLowerCase();
+function setupAutoComplete(input, suggestionsDiv, onSelect) {
+    input.addEventListener("input", () => {
+        const value = input.value.toLowerCase();
         if (!value) {
             suggestionsDiv.style.display = "none";
             return;
@@ -81,33 +64,69 @@ function setupSearch() {
     suggestionsDiv.addEventListener("click", (e) => {
         const item = e.target.closest(".suggestion-item");
         if (item) {
-            performSearch(item.dataset.name);
+            input.value = item.dataset.name;
+            suggestionsDiv.style.display = "none";
+            onSelect(item.dataset.name);
         }
+    });
+
+    input.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") onSelect(input.value);
     });
 
     // Hide suggestions when clicking outside
     document.addEventListener("click", (e) => {
-        if (!e.target.closest(".search-bar")) {
+        if (!e.target.closest(".hero-search-container") && !e.target.closest(".nav-search")) {
             suggestionsDiv.style.display = "none";
         }
     });
-
-    searchBtn.addEventListener("click", () => performSearch());
-
-    searchInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter") performSearch();
-    });
 }
 
+function startImpactAnalysis(playerName) {
+    const player = playerData.find(p => p.name.toLowerCase() === playerName.toLowerCase());
+    if (!player) return;
 
+    const landing = document.getElementById("landing-screen");
+    const loader = document.getElementById("loader-wrapper");
+    const dashboard = document.getElementById("dashboard-main");
+
+    // Phase 1: Fade out landing
+    landing.classList.add("fade-out");
+
+    setTimeout(() => {
+        landing.classList.add("hidden");
+        // Phase 2: Show loader
+        loader.classList.remove("hidden");
+        loader.classList.add("fade-in");
+
+        // Artificial delay for "calculating" feel
+        setTimeout(() => {
+            loader.classList.remove("fade-in");
+            loader.classList.add("fade-out");
+
+            setTimeout(() => {
+                loader.classList.add("hidden");
+                // Phase 3: Reveal Dashboard
+                dashboard.classList.remove("hidden");
+                dashboard.classList.add("fade-in");
+                updateDashboard(player);
+
+                // Set Navbar search value
+                const navInput = document.getElementById("nav-player-search");
+                navInput.value = "";
+                navInput.value = player.name;
+            }, 600);
+        }, 2200);
+    }, 500);
+}
 
 function updateDashboard(player) {
-    const dashboard = document.querySelector(".dashboard-grid");
+    const grid = document.querySelector(".dashboard-grid");
 
-    // Fade out and slide up
-    dashboard.style.transition = 'all 400ms ease-out';
-    dashboard.style.opacity = '0';
-    dashboard.style.transform = 'translateY(-10px)';
+    // Smooth transition between players if already on dashboard
+    grid.style.opacity = "0";
+    grid.style.transform = "translateY(10px)";
+    grid.style.transition = "all 0.5s ease";
 
     setTimeout(() => {
         renderImpactGauge(player.impact_score);
@@ -115,111 +134,66 @@ function updateDashboard(player) {
         renderMomentumChart(player.last_10_innings);
         renderPlayerCard(player);
 
-        // Fade in and slide to original position
-        dashboard.style.opacity = '1';
-        dashboard.style.transform = 'translateY(0)';
-
-    }, 400); // Trigger re-render and fade-in after 400ms fade out
+        grid.style.opacity = "1";
+        grid.style.transform = "translateY(0)";
+    }, 500);
 }
 
-
-
 function renderPlayerCard(player) {
-
     const container = document.getElementById("player-card-container");
-
     let category = "";
-
     if (player.impact_score >= 75) category = "Match Winner";
     else if (player.impact_score >= 60) category = "Impact Player";
     else if (player.impact_score >= 40) category = "Average Contributor";
     else category = "Needs Form";
 
-    let clutch = "";
-
-    if (player.impact_score >= 80) {
-
-        clutch = `<div class="clutch-badge">🔥 CLUTCH PLAYER</div>`;
-
-    }
+    let clutch = player.impact_score >= 80 ? `<div class="clutch-badge">🔥 CLUTCH PLAYER</div>` : "";
 
     container.innerHTML = `
-
-<h2>Player Profile</h2>
-
-<div class="player-card">
-
-<h3>${player.name}</h3>
-
-${clutch}
-
-<p>Impact Score: ${player.impact_score}</p>
-
-<p>Matches Played: ${player.matches_played}</p>
-
-<p>Trend: ${player.trend}</p>
-
-<p>Category: ${category}</p>
-
-</div>
-
-`;
-
+        <h2>Player Profile</h2>
+        <div class="player-card">
+            <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--primary-accent)">${player.name}</h3>
+            ${clutch}
+            <div class="comp-stat-row"><span>Impact Score</span> <strong>${player.impact_score}</strong></div>
+            <div class="comp-stat-row"><span>Trend</span> <strong class="trend-${player.trend.toLowerCase()}">${player.trend.toUpperCase()}</strong></div>
+            <div class="comp-stat-row"><span>Matches Played</span> <strong>${player.matches_played}</strong></div>
+            <div class="comp-stat-row"><span>Class</span> <strong>${category}</strong></div>
+        </div>
+    `;
 }
 
-
-
 function setupComparison() {
-
     const a = document.getElementById("player-a-select");
-
     const b = document.getElementById("player-b-select");
 
+    // Clear and refill with unique values
+    a.innerHTML = '<option value="">Select Player A</option>';
+    b.innerHTML = '<option value="">Select Player B</option>';
+
     playerData.forEach(player => {
-
         const opt1 = document.createElement("option");
-
         opt1.value = player.name;
-
         opt1.textContent = player.name;
-
         const opt2 = opt1.cloneNode(true);
-
         a.appendChild(opt1);
-
         b.appendChild(opt2);
-
     });
 
     a.addEventListener("change", compare);
-
     b.addEventListener("change", compare);
-
 }
-
-
 
 function compare() {
-
-    const a = document.getElementById("player-a-select").value;
-
-    const b = document.getElementById("player-b-select").value;
-
-    const p1 = playerData.find(p => p.name === a);
-
-    const p2 = playerData.find(p => p.name === b);
-
+    const aVal = document.getElementById("player-a-select").value;
+    const bVal = document.getElementById("player-b-select").value;
+    const p1 = playerData.find(p => p.name === aVal);
+    const p2 = playerData.find(p => p.name === bVal);
     if (!p1 || !p2) return;
-
     renderComparison(p1, p2);
-
 }
-
-
 
 function renderComparison(a, b) {
     const wrap = document.getElementById("comparison-cards-wrapper");
-
     let statusMsg = "";
     let winnerName = null;
 

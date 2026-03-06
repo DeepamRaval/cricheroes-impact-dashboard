@@ -19,8 +19,27 @@
     <div class="bg-glow glow-1"></div>
     <div class="bg-glow glow-2"></div>
 
-    <!-- Loading Screen -->
-    <div id="loader-wrapper">
+    <!-- Premium Landing Screen -->
+    <div id="landing-screen">
+        <div class="hero-content">
+            <h1 class="hero-title">CricHeroes <span>Impact Engine</span></h1>
+            <p class="hero-subtitle">Advanced Analytics for the Modern Game</p>
+
+            <div class="hero-search-container">
+                <input type="text" id="landing-player-search" placeholder="Search a player (e.g. Rohit Sharma)..."
+                    autocomplete="off">
+                <div id="landing-suggestions" class="suggestions-dropdown"></div>
+                <button id="analyze-btn">Analyze Impact</button>
+            </div>
+
+            <div class="hero-footer">
+                <p>Powered by True-Impact v4.0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Screen (Triggered between Landing and Dashboard) -->
+    <div id="loader-wrapper" class="hidden">
         <div class="loader-content">
             <div class="cricket-ball-loader"></div>
             <h2 class="loader-text">Calculating Impact...</h2>
@@ -30,86 +49,55 @@
         </div>
     </div>
 
-    <nav class="navbar">
-        <div class="navbar-container">
-            <h1>CricHeroes Impact Metric</h1>
-        </div>
-    </nav>
-
-    <main class="dashboard-container">
-
-        <section class="search-section">
-
-            <div class="search-bar">
-
-                <div style="position: relative; flex: 1; display: flex;">
-                    <input type="text" id="player-search" placeholder="Search player" autocomplete="off">
-                    <div id="search-suggestions" class="suggestions-dropdown"></div>
+    <!-- Main Dashboard (Initially Hidden) -->
+    <div id="dashboard-main" class="hidden">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <h1>CricHeroes Impact Metric</h1>
+                <div class="nav-search">
+                    <input type="text" id="nav-player-search" placeholder="Search another player..." autocomplete="off">
+                    <div id="nav-suggestions" class="suggestions-dropdown"></div>
                 </div>
-
-                <button id="search-btn">Search</button>
-
             </div>
+        </nav>
 
-        </section>
+        <main class="dashboard-container">
+            <div class="dashboard-grid">
+                <section class="player-info-section" id="player-card-container">
+                    <h2>Player Profile</h2>
+                </section>
 
+                <section class="impact-gauge-section" id="gauge-container">
+                    <h2>Impact Score</h2>
+                </section>
 
-        <div class="dashboard-grid">
+                <section class="impact-chart-section" id="innings-chart-container">
+                    <h2>Impact per Inning</h2>
+                </section>
 
+                <section class="momentum-chart-section" id="momentum-chart-container">
+                    <h2>Impact Momentum</h2>
+                </section>
 
-            <section class="player-info-section" id="player-card-container">
+                <section class="comparison-section">
+                    <h2>Player Comparison</h2>
+                    <div class="comparison-select">
+                        <select id="player-a-select">
+                            <option value="">Select Player A</option>
+                        </select>
+                        <select id="player-b-select">
+                            <option value="">Select Player B</option>
+                        </select>
+                    </div>
+                    <div id="comparison-cards-wrapper"></div>
+                </section>
+            </div>
+        </main>
 
-                <h2>Player Profile</h2>
-
-            </section>
-
-
-            <section class="impact-gauge-section" id="gauge-container">
-
-                <h2>Impact Score</h2>
-
-            </section>
-
-
-            <section class="impact-chart-section" id="innings-chart-container">
-                <h2>Impact per Inning</h2>
-            </section>
-
-
-            <section class="momentum-chart-section" id="momentum-chart-container">
-                <h2>Impact Momentum</h2>
-            </section>
-
-
-            <section class="comparison-section">
-                <h2>Player Comparison</h2>
-
-                <div class="comparison-select">
-                    <select id="player-a-select">
-                        <option value="">Select Player A</option>
-                    </select>
-
-                    <select id="player-b-select">
-                        <option value="">Select Player B</option>
-                    </select>
-                </div>
-
-                <!-- Comparison Cards will render here -->
-                <div id="comparison-cards-wrapper">
-                </div>
-
-            </section>
-
-
-        </div>
-
-    </main>
-
-    <footer class="footer">
-
-        <p>© 2026 CricHeroes</p>
-
-    </footer>
+        <footer class="footer">
+            <p>© 2026 CricHeroes Impact Dashboard</p>
+        </footer>
+    </div>
 
 
     <script src="js/components/gauge.js"></script>

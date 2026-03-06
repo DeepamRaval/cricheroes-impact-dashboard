@@ -40,9 +40,9 @@ function renderImpactGauge(score) {
         <polygon points="106,110 114,110 110,35" fill="#e5e7eb"/>
         </g>
         </svg>
-        <div style="position:absolute;bottom:-10px;width:100%;text-align:center">
-        <div class="count-up-score" style="font-size:2.5rem;font-weight:700">0</div>
-        <div style="font-size:0.9rem;color:${color};font-weight:600">${category}</div>
+        <div style="position:absolute;bottom:0px;width:100%;text-align:center">
+        <div class="count-up-score" style="font-size:2.2rem;font-weight:800;letter-spacing:-1px">0</div>
+        <div style="font-size:0.85rem;color:${color};font-weight:600;opacity:0.9">${category}</div>
         </div>
         </div>
     `;
