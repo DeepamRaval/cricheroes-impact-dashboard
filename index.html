@@ -4,32 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>CricHeroes Impact Dashboard</title>
-
+    <title>CricHeroes Impact Metric</title>
     <link rel="stylesheet" href="css/style.css">
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
 <body>
-
+    <!-- LANDING PAGE -->
     <!-- Background Elements -->
     <div class="bg-glow glow-1"></div>
     <div class="bg-glow glow-2"></div>
 
     <!-- Premium Landing Screen -->
-    <div id="landing-screen">
+    <div id="page-landing">
         <div class="hero-content">
             <h1 class="hero-title">CricHeroes <br><span>Impact Engine</span></h1>
             <p class="hero-subtitle">Advanced Analytics for the Modern Game</p>
 
-            <div class="hero-search-container">
-                <input type="text" id="landing-player-search" placeholder="Search a player (e.g. Rohit Sharma)..."
+            <div class="hero-search-container" id="lp-box">
+                <input type="text" id="lp-input" placeholder="Search a player (e.g. Rohit Sharma)..."
                     autocomplete="off">
-                <div id="landing-suggestions" class="suggestions-dropdown"></div>
-                <button id="analyze-btn">Analyze Impact</button>
+                <div id="lp-sugs" class="lp-sugs"></div>
+                <button id="lp-btn">Analyze Impact</button>
+            </div>
+            <div class="lp-err" id="lp-err" style="display:none;">Player not found. Try typing a name from the list.
             </div>
 
             <div class="hero-footer">
@@ -38,71 +36,70 @@
         </div>
     </div>
 
-    <!-- Loading Screen (Triggered between Landing and Dashboard) -->
-    <div id="loader-wrapper" class="hidden">
-        <div class="loader-content">
-            <div class="cricket-ball-loader"></div>
-            <h2 class="loader-text">Calculating Impact...</h2>
-            <div class="loader-progress">
-                <div class="loader-progress-bar"></div>
+    <!-- DASHBOARD PAGE -->
+    <div id="page-dash">
+        <div id="loader">
+            <div class="loader-inner">
+                <div class="ball"></div>
+                <div class="loader-text">Calculating Impact...</div>
+                <div class="prog-wrap">
+                    <div class="prog-bar"></div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Main Dashboard (Initially Hidden) -->
-    <div id="dashboard-main" class="hidden">
-        <nav class="navbar">
-            <div class="navbar-container">
-                <h1>CricHeroes Impact Metric</h1>
-                <div class="nav-search">
-                    <input type="text" id="nav-player-search" placeholder="Search another player..." autocomplete="off">
-                    <div id="nav-suggestions" class="suggestions-dropdown"></div>
-                </div>
+        <nav class="nav">
+            <div class="nav-inner">
+                <span class="nav-title">CricHeroes Impact Metric</span>
+                <button class="nav-back" id="nav-back">← Home</button>
             </div>
         </nav>
 
-        <main class="dashboard-container">
-            <div class="dashboard-grid">
-                <section class="player-info-section" id="player-card-container">
+        <main class="dash-main">
+            <div class="dash-search">
+                <div class="search-bar">
+                    <div class="dash-search-wrap">
+                        <input id="dsearch" type="text" placeholder="Search player..." autocomplete="off" />
+                        <div class="dd" id="dd"></div>
+                    </div>
+                    <button id="dbtn">Search</button>
+                </div>
+            </div>
+
+            <div class="grid" id="grid">
+                <div class="card c-player" id="card-player">
                     <h2>Player Profile</h2>
-                </section>
+                </div>
 
-                <section class="impact-gauge-section" id="gauge-container">
+                <div class="card c-gauge" id="card-gauge">
                     <h2>Impact Score</h2>
-                </section>
+                </div>
 
-                <section class="impact-chart-section" id="innings-chart-container">
+                <div class="card c-innings" id="card-innings">
                     <h2>Impact per Inning</h2>
-                </section>
+                </div>
 
-                <section class="momentum-chart-section" id="momentum-chart-container">
+                <div class="card c-moment" id="card-moment">
                     <h2>Impact Momentum</h2>
-                </section>
+                </div>
 
-                <section class="comparison-section">
+                <div class="card c-compare">
                     <h2>Player Comparison</h2>
-                    <div class="comparison-select">
-                        <select id="player-a-select">
+                    <div class="cmp-selects">
+                        <select id="sel-a">
                             <option value="">Select Player A</option>
                         </select>
-                        <select id="player-b-select">
+                        <select id="sel-b">
                             <option value="">Select Player B</option>
                         </select>
                     </div>
-                    <div id="comparison-cards-wrapper"></div>
-                </section>
+                    <div id="cmp-wrap"></div>
+                </div>
             </div>
         </main>
 
-        <footer class="footer">
-            <p>© 2026 CricHeroes Impact Dashboard</p>
-        </footer>
+        <footer class="dash-footer">©️ 2026 CricHeroes Impact Metric</footer>
     </div>
-
-
-    <script src="js/components/gauge.js"></script>
-
-    <script src="js/components/charts.js"></script>
 
     <script src="js/script.js"></script>
 
